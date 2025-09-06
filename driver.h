@@ -11,7 +11,7 @@
 class driver {
 location curr_location;
 bool available = true;
-set<string>preffered_areas;
+set<int>preffered_areas;
 string name;
 string email;
 string telephone;
