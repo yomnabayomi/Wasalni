@@ -1,0 +1,36 @@
+# Build folders
+/build/
+/cmake-build-debug/
+/cmake-build-release/
+
+# VSCode settings
+.vscode/
+
+# Compiled object files
+*.o
+*.obj
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Libraries
+*.lib
+*.a
+*.so
+*.dll
+*.dylib
+
+# Debug files
+*.pdb
+*.idb
+
+# Logs
+*.log
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
