@@ -4,7 +4,7 @@
 
 #ifndef USER_H
 #define USER_H
-#include "admin.cpp"
+#include "admin.h"
 
 
 class user {
