@@ -37,7 +37,7 @@ string name;
   cin>>coordinates.first;
   cin>>coordinates.second;
   numLocations++;
-  location locat=location(coordinates,area,name);
+  location locat=location(coordinates,name);
   locationById.at(numLocations) = locat;
 
   // push_back the location in the adjacency lit ??
@@ -200,13 +200,11 @@ for(const auto [id,loc] : locationById){
 
 
 void admin :: dfs (int node , vector<bool>& visited){
-
     visited[node] = true ;
-    cout << locationById[node].name << ' ' ;  
+    cout << locationById[node].name << ' ' ;
     for(auto child : adj[node]){
         if(!visited[child])
         dfs(child , visited);
-
     }
 }
 

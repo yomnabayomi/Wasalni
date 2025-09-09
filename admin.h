@@ -16,20 +16,13 @@ using namespace std;
 #define ADMIN_H
 
 struct location{
-
-
   // should we add weight attribute ??
-   
-
-
 pair<float,float>coordinates;
-string area;
 string name;
 
 //constructor
-location(pair<float,float>coordinates,string area,string name){
+location(pair<float,float>coordinates,string name){
   this->coordinates = coordinates;
-  this->area = area;
   this->name = name;
 }
 };

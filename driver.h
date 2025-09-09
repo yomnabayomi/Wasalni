@@ -9,12 +9,16 @@
 
 
 class driver {
-location curr_location;
+location curr_location=location({0,0}," ");
 bool available = true;
-set<int>preffered_areas;
 string name;
 string email;
 string telephone;
+    string password;
+pair<int,int>street; // node1 , node2
+driver(string name ,string email,string telephone,string pass);
+void setdriverlocation(location curr_locat,pair<int,int>street);
+void setavailability(bool available);
 };
 
 
