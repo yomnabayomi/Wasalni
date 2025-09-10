@@ -3,27 +3,50 @@
 //
 #include "admin.h"
 using namespace std;
+
+
+
+
+
 int admin::numLocations = 0; 
 
-
- void admin::bfs(queue<int>& Qlocat, vector<bool>& visited, int start) {
-    visited[start] = true;
-    Qlocat.push(start);  // Add starting node to queue
-
-    while(!Qlocat.empty()) {
-        int curr = Qlocat.front();
-        Qlocat.pop();
-        cout<<locationById.at(curr).name<<endl;
-
-        for(int neighbor : adj[curr]) {  // Use curr, not start
-            if(visited[neighbor] == false) {
-                visited[neighbor] = true;
-                Qlocat.push(neighbor);
-            }
-        }
-    }
+admin::admin() {
+  numLocations = 0;
 }
 
+
+// helper Functions 
+bool admin :: location_is_found (int loctID){
+    return (loctID != -1);
+}
+bool admin :: road_is_found(int outerIndex , int innerIndex){
+    auto it = find(adj[outerIndex].begin() , adj[outerIndex].end() , innerIndex);
+     if (it != adj[outerIndex].end()){
+      adj[outerIndex].erase(it);
+      return true;
+     }
+
+     return false ;
+}
+int admin::findLocationByName(const string &locationName) {
+     // loop on unordered map
+    for(const auto pair : locationById) {
+        if(pair.second.name == locationName) {
+            return pair.first;
+        }
+    }
+    return -1; // Not found
+}
+
+
+
+
+
+// update Functions(add , delete)
+
+
+
+//add location , road 
 
 void admin::add_location() {
  pair<float,float>coordinates;
@@ -43,22 +66,6 @@ string name;
   // push_back the location in the adjacency lit ??
 
   cout<<"location added successfully"<<l;
-}
-
-
-admin::admin() {
-  numLocations = 0;
-}
-
-
-// Helper function to find location ID by name
-int admin::findLocationByName(const string &locationName) {
-    for(const auto pair : locationById) {
-        if(pair.second.name == locationName) {
-            return pair.first;
-        }
-    }
-    return -1; // Not found
 }
 void admin::add_road() {
 
@@ -84,6 +91,9 @@ void admin::add_road() {
 
 
 
+
+
+// delete location , road 
 void admin :: delete_location(){
 
 
@@ -127,20 +137,6 @@ cout << "location is deleted successfully" ;
 
 
 }
-
-
-
-bool admin :: road_is_found(int outerIndex , int innerIndex){
-    auto it = find(adj[outerIndex].begin() , adj[outerIndex].end() , innerIndex);
-     if (it != adj[outerIndex].end()){
-      adj[outerIndex].erase(it);
-      return true;
-     }
-
-     return false ;
-}
-
-
 void admin :: delete_road () {
 
     string city1 , city2 ; 
@@ -176,12 +172,7 @@ return ;
 
 
 
-bool admin :: location_is_found (int loctID){
-    return (loctID != -1);
-}
-
-
-
+// Traversal functions 
 
 void admin :: dfs_caller (vector<bool>& visited){
 
@@ -192,13 +183,7 @@ for(const auto [id,loc] : locationById){
     }
 }
 
-
-
-
 }
-
-
-
 void admin :: dfs (int node , vector<bool>& visited){
     visited[node] = true ;
     cout << locationById[node].name << ' ' ;
@@ -207,7 +192,20 @@ void admin :: dfs (int node , vector<bool>& visited){
         dfs(child , visited);
     }
 }
+ void admin::bfs(queue<int>& Qlocat, vector<bool>& visited, int start) {
+    visited[start] = true;
+    Qlocat.push(start);  // Add starting node to queue
 
+    while(!Qlocat.empty()) {
+        int curr = Qlocat.front();
+        Qlocat.pop();
+        cout<<locationById.at(curr).name<<endl;
 
-
-
+        for(int neighbor : adj[curr]) {  // Use curr, not start
+            if(visited[neighbor] == false) {
+                visited[neighbor] = true;
+                Qlocat.push(neighbor);
+            }
+        }
+    }
+}

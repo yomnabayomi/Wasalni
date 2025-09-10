@@ -14,7 +14,8 @@ bool available = true;
 string name;
 string email;
 string telephone;
-    string password;
+string password;
+
 pair<int,int>street; // node1 , node2
 driver(string name ,string email,string telephone,string pass);
 void setdriverlocation(location curr_locat,pair<int,int>street);

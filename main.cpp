@@ -23,3 +23,48 @@ int main() {
 // href="https://www.jetbrains.com/help/clion/">jetbrains.com/help/clion/</a>.
 //  Also, you can try interactive lessons for CLion by selecting
 //  'Help | Learn IDE Features' from the main menu.
+
+
+/*
+
+configuration step 
+mkdir build
+cmake -S . -B build
+
+
+
+
+
+🔄 When to re-run step 1 (configure)
+
+Do this only if:
+
+You delete the build/ folder
+
+You add/remove .cpp files in CMakeLists.txt
+
+You change CMake options
+
+Otherwise → skip straight to Step 2.
+
+
+*/
+
+
+
+
+
+/*
+
+
+
+
+
+👉 Most of the time, your daily workflow is just:
+
+Edit code
+
+Run cmake --build build --config Debug
+
+Run .\build\Debug\Wasalni.exe
+*/
