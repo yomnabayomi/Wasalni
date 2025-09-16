@@ -9,18 +9,37 @@
 
 
 class driver {
-location curr_location=location({0,0}," ");
+
+
+
+    private :
+    string password;
+    public :
+    float progress ;
+pair<int,int>street; // node1 , node2
 bool available = true;
+
+
+location curr_location=location({0,0}," ");
+
 string name;
 string email;
 string telephone;
-string password;
 
-pair<int,int>street; // node1 , node2
+
+
+
 driver(string name ,string email,string telephone,string pass);
 void setdriverlocation(location curr_locat,pair<int,int>street);
 void setavailability(bool available);
+
+
+void update_progress (float delta  , admin & a);
+void snapToEdge (int node  , admin & a);
+void set_edge (pair <int , int > street  );
+
 };
+
 
 
 

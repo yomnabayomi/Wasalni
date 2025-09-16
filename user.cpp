@@ -45,6 +45,8 @@ void user :: requestRide(admin & Admin ){
     location current = Admin.locationById[firstID];
     location destination = Admin.locationById[secondID];
 
+
+    // here we should add function call 
     // after implementing dijkstra we should call it with current and destination being the parameters 
 
 }

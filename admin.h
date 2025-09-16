@@ -10,16 +10,25 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <algorithm>
+
 #define l endl;
 using namespace std;
 #ifndef ADMIN_H
 #define ADMIN_H
+
+
+class driver;
+class user; 
 
 struct location
 {
   // should we add weight attribute ??
   pair<float, float> coordinates;
   string name;
+
+
+      // default constructor
+    location() : coordinates({0.0, 0.0}) , name("") {}
 
   // constructor
   location(pair<float, float> coordinates, string name)
@@ -34,13 +43,19 @@ class admin
 
 public:
   static int numLocations;
+  static int numdrivers ;
+  static int numusers ;
 
   // why not adding bool vis array
 
 
   
-  unordered_map<int , vector<int>> adj;                   // adj list
+   unordered_map<int , vector<int>> adj;                   // adj list
   unordered_map<int, location> locationById; // assign id to every location to facilitate the searching
+  unordered_map <int ,driver> drivers ;
+  unordered_map <int , user> users ;
+
+
 
   // functions
   admin();
@@ -61,6 +76,9 @@ public:
   void dfs(int node, vector<bool> &visited);
   void bfs(queue<int> &Qlocat, vector<bool> &visited, int start);
   void displayData();
+
+
+  float lengthBetNodes (int a , int b );
 };
 
-#endif ADMIN_H
+#endif ADMIN_H;

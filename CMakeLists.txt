@@ -9,6 +9,7 @@ add_executable(Wasalni
     admin.cpp
     driver.cpp
     user.cpp
+    RideManager.cpp
 )
 
 # Set output directories for executables and libraries

@@ -2,11 +2,17 @@
 // Created by Hana on 9/2/2025.
 //
 #include "admin.h"
+#include "driver.h"
+#include "user.h"
 using namespace std;
 
 
 // I need to increment the numLocation in the location's contructor 
 int admin::numLocations = 0;
+int admin :: numdrivers =0 ;
+int admin :: numusers = 0;
+
+// increment it then add it to the unordered map
 
 admin::admin()
 {
