@@ -10,6 +10,8 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <algorithm>
+# include <cmath>
+
 
 #define l endl;
 using namespace std;
@@ -50,7 +52,7 @@ public:
 
 
   
-   unordered_map<int , vector<int>> adj;                   // adj list
+   unordered_map<int , vector<pair<int,float> > > adj;        // adj list    {node id , weight }
   unordered_map<int, location> locationById; // assign id to every location to facilitate the searching
   unordered_map <int ,driver> drivers ;
   unordered_map <int , user> users ;
@@ -63,7 +65,7 @@ public:
   int findLocationByName(const string &locationName);
   bool location_is_found(int loctId);
   bool road_is_found(int, int);
-
+bool  edge_exists(int , int );
 
   void addGraph();
   void add_location();

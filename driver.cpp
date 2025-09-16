@@ -39,17 +39,44 @@ void driver :: update_progress (float delta , admin & a){
 void driver :: snapToEdge (int node , admin & a){
 int prevNode = this->street.first ;
 
- vector <int> neighbors = a.adj[node];
 
-neighbors.erase(remove(neighbors.begin(),neighbors.end(),prevNode));
+
+
+auto it = a.adj.find(node);
+    if (it == a.adj.end() || it->second.empty()) {
+        // no neighbors: stay where you are
+        this->street = {node, prevNode};
+        return;
+    }
+
+
+
+    // build list of candidates excluding prevNode
+    std::vector<int> candidates;
+    for (const auto &p : it->second) {
+        if (p.first != prevNode) candidates.push_back(p.first);
+    }
+
+    if (!candidates.empty()) {
+        int randomIndex = rand() % candidates.size();
+        this->street = {node, candidates[randomIndex]};
+    } else {
+        // no candidates except prevNode => bounce back
+        this->street = {node, prevNode};
+    }
+
+
+//  vector <pair < int , float> > neighbors = a.adj[node];
+
+// neighbors.erase(remove(neighbors.begin(),neighbors.end(),prevNode));
 
     
-    if(! neighbors.empty() ){
-        int randomIndex = rand() % neighbors.size();
-        this->street = {node , neighbors[randomIndex]};
-    }else{
-        this->street = {node , prevNode};
-    }
+//     if(! neighbors.empty() ){
+//         int randomIndex = rand() % neighbors.size();
+//         this->street = {node , neighbors[randomIndex].first};
+//     }else{
+//         this->street = {node , prevNode};
+//     }
 
     
 

@@ -1,9 +1,12 @@
 
 #ifndef RIDEMANAGER_H
 #define RIDEMANAGER_H
+
+#include <cstdlib>   // rand
 #include "admin.h"
 #include "driver.h"
 #include "user.h"
+
 
 
 // when to  update  position driver 

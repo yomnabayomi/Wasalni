@@ -26,19 +26,42 @@ bool admin ::location_is_found(int loctID)
 }
 bool admin ::road_is_found(int outerIndex, int innerIndex)
 {
-    auto it = find(adj[outerIndex].begin(), adj[outerIndex].end(), innerIndex);
-    if (it != adj[outerIndex].end())
+
+
+    auto &neighbors = adj[outerIndex]; 
+
+    auto it = std::find_if(neighbors.begin(), neighbors.end(),
+                           [innerIndex](const std::pair<int,float> &p) {
+                               return p.first == innerIndex; // match by node ID
+                           });
+
+    if (it != neighbors.end())
     {
-        adj[outerIndex].erase(it);
+        neighbors.erase(it);
         return true;
     }
 
-    return false;
+    return false;                       
+
+
+
+
+//    auto it = find(adj[outerIndex].begin(), adj[outerIndex].end(), innerIndex);
+//     if (it != adj[outerIndex].end())
+//     {
+//         adj[outerIndex].erase(it);
+//         return true;
+//     }
+
+//     return false;
+
 }
+
+
 int admin::findLocationByName(const string &locationName)
 {
     // loop on unordered map(locationByid)
-    for (const auto pair : locationById)
+    for (const auto & pair : locationById)
     {
         if (pair.second.name == locationName)
         {
@@ -46,6 +69,15 @@ int admin::findLocationByName(const string &locationName)
         }
     }
     return -1; // Not found
+}
+
+
+bool admin::edge_exists(int u, int v) {
+    auto &neighbors = adj[u];
+    return std::any_of(neighbors.begin(), neighbors.end(),
+                       [v](const std::pair<int,float>& p) {
+                           return p.first == v;
+                       });
 }
 
 // update Functions(add , delete)
@@ -57,6 +89,7 @@ void admin :: addGraph(){
     // updating the adj list and I need their id's 
     // updating the locationbyId => id , location with the new locations  
 }
+
 void admin::add_location()
 {
     pair<float, float> coordinates;
@@ -93,9 +126,21 @@ void admin::add_road(){
         return;
     }
 
+
+
+    // check for existing edge => implement edge_exist 
+if (edge_exists(firstId, secondId)) {
+    cout << "Road already exists!" << endl;
+    return;
+}
+
+
+
+
     // Add bidirectional road
-    adj[firstId].push_back(secondId);
-    adj[secondId].push_back(firstId);
+    float weight = lengthBetNodes(firstId , secondId);
+    adj[firstId].push_back({secondId , weight});
+    adj[secondId].push_back({firstId , weight});
 
     cout << "Road added successfully!" << endl;
 }
@@ -124,17 +169,38 @@ void admin ::delete_location()
         cout << "deleting location  process is canceled" << l;
         return;
     }
-    for (const auto child : adj[loctID])
-    {
 
-        adj[child].erase(
-            remove(adj[child].begin(), adj[child].end(), loctID),
-            adj[child].end());
+auto it = adj.find(loctID);
+if (it != adj.end()) {
+    // for each neighbor of loctID, remove the reverse edge
+    for (const auto &p : it->second) {
+        int child = p.first;
 
-        // vec[outerIndex].erase(vec[outerIndex].begin() + innerIndex);
+        // remove (child -> loctID) directly here
+        auto &neighbors = adj[child];
+        neighbors.erase(
+            std::remove_if(neighbors.begin(), neighbors.end(),
+                           [loctID](const std::pair<int,float> &pr) {
+                               return pr.first == loctID;
+                           }),
+            neighbors.end()
+        );
     }
+    // finally remove adjacency list for loctID
+    adj.erase(it);
+}
 
-    adj.erase(loctID);
+    // for (const auto [child , wieight ]: adj[loctID])
+    // {
+
+    //     adj[child].erase(
+    //         remove(adj[child].begin(), adj[child].end(), loctID),
+    //         adj[child].end());
+
+    //     // vec[outerIndex].erase(vec[outerIndex].begin() + innerIndex);
+    // }
+
+    // adj.erase(loctID);
     locationById.erase(loctID);
 
     cout << "location is deleted successfully";
@@ -164,12 +230,20 @@ void admin ::delete_road()
         return;
     }
 
-    if (road_is_found(first_id, second_id) && road_is_found(second_id, first_id))
+
+
+ // undirected graph → must delete both sides
+    bool removedA = road_is_found(first_id, second_id);
+    bool removedB = road_is_found(second_id, first_id);
+
+    if (removedA && removedB)
     {
-        cout << " road is deleted successfully" << l;
-        return;
+        cout << "Road is deleted successfully" << l;
     }
-    cout << "road is not found between the two locations " << l;
+    else
+    {
+        cout << "Road is not found between the two locations " << l;
+    }
 }
 
 // Traversal functions
@@ -187,11 +261,21 @@ void admin ::dfs_caller(vector<bool> &visited)
 void admin ::dfs(int node, vector<bool> &visited){
     visited[node] = true;
     cout << locationById[node].name << ' ';
-    for (auto child : adj[node])
-    {
-        if (!visited[child])
-            dfs(child, visited);
+
+    auto it = adj.find(node);
+    if (it == adj.end()) return;
+
+    for (const auto &p : it->second) { // p.first = neighbor, p.second = weight
+        int neighbor = p.first;
+        if (!visited[neighbor])
+            dfs(neighbor, visited);
     }
+
+    // for (auto [neighbor , weight]: adj[node])
+    // {
+    //     if (!visited[neighbor])
+    //         dfs(neighbor, visited);
+    // }
 }
 void admin::bfs(queue<int> &Qlocat, vector<bool> &visited, int start){
     visited[start] = true;
@@ -203,16 +287,53 @@ void admin::bfs(queue<int> &Qlocat, vector<bool> &visited, int start){
         Qlocat.pop();
         cout << locationById.at(curr).name << endl;
 
-        for (int neighbor : adj[curr])
-        { // Use curr, not start
-            if (visited[neighbor] == false)
-            {
+
+
+        auto it = adj.find(curr);
+        if (it == adj.end()) continue;
+
+        for (const auto &p : it->second) {
+            int neighbor = p.first;
+            if (!visited[neighbor]) {
                 visited[neighbor] = true;
                 Qlocat.push(neighbor);
             }
         }
+
+        // for (auto [neighbor , weight ] : adj[curr])
+        // { // Use curr, not start
+        //     if (visited[neighbor] == false)
+        //     {
+        //         visited[neighbor] = true;
+        //         Qlocat.push(neighbor);
+        //     }
+        // }
     }
 }
 void admin :: displayData () {
     // to be implemented 
+}
+
+
+// id node 1 , id node 2 
+float admin :: lengthBetNodes (int a , int b){
+
+
+
+double xA , yA , xB , yB ;
+
+xA =  locationById[a].coordinates.first ;
+yA =  locationById[a].coordinates.second ;
+xB=   locationById[b].coordinates.first ;
+yB=   locationById[b].coordinates.second ;
+
+
+double diffX = xA - xB  , diffY = yA - yB ;
+
+double  dist = sqrt (diffX * diffX + diffY * diffY  );
+
+return static_cast<float>(dist); // convert at the end
+
+
+
 }

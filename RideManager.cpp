@@ -38,11 +38,14 @@ toDeleteNodes.push_back(tempId);
 Admin.locationById[tempId] = d.curr_location ;
 
 
-Admin.adj[firstNode].push_back(tempId);
-Admin.adj[tempId].push_back(firstNode);
 
-Admin.adj[secondNode].push_back(tempId);
-Admin.adj[tempId].push_back(secondNode);
+float distA_temp = d.progress * Admin.lengthBetNodes(firstNode , secondNode) , distB_temp = (1-d.progress) * Admin.lengthBetNodes(firstNode , secondNode ) ;
+
+Admin.adj[firstNode].push_back({tempId, distA_temp});
+Admin.adj[tempId].push_back({firstNode,distA_temp});
+
+Admin.adj[secondNode].push_back({tempId, distB_temp});
+Admin.adj[tempId].push_back({secondNode,distB_temp});
 
 
 
