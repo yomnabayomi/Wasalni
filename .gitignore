@@ -14,7 +14,7 @@
 *.exe
 *.out
 *.app
-
+*.ilk
 # Libraries
 *.lib
 *.a
