@@ -27,6 +27,14 @@
 
 ---
 
+## Tech Stack  
+- **Language**: C++  
+- **Concepts**: Object-Oriented Programming (OOP), Graph Theory, Shortest Path Algorithms  
+- **Data Structures**: Adjacency List, Priority Queue  
+- **Tools**: Git, GitHub, VS Code
+
+ ---
+
 ## System Overview
 Wasalni models the city as a **graph**, where:
 - **Nodes** represent intersections.  
